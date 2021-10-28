@@ -1,0 +1,9 @@
+syntax = "proto3";
+package proto.person;
+option go_package = "github.com/brunocalza/textile-stack/gen/person;person";
+
+message Person {
+  string name = 1;
+  int32 id = 2;
+  optional string email = 3;
+}
