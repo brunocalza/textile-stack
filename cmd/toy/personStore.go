@@ -1,18 +1,19 @@
 package main
 
 import (
-	"fmt"
+	"context"
 
+	storepkg "github.com/brunocalza/textile-stack/cmd/toy/store"
 	pb "github.com/brunocalza/textile-stack/gen/proto/person"
 	"github.com/spf13/cobra"
 	"github.com/textileio/cli"
 	"google.golang.org/protobuf/proto"
 )
 
-var personEncodeCmd = &cobra.Command{
-	Use:   "encode",
-	Short: "encode receives the person info and encodes using ProtoBuffer",
-	Long:  `encode receives the person info and encodes using ProtoBuffer`,
+var personStoreCmd = &cobra.Command{
+	Use:   "store",
+	Short: "store stores the person info in the database",
+	Long:  `store stores the person info in the database`,
 	Args:  cobra.ExactArgs(0),
 	PersistentPreRun: func(c *cobra.Command, args []string) {
 		cli.ExpandEnvVars(v, v.AllSettings())
@@ -34,7 +35,17 @@ var personEncodeCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		fmt.Printf("%x\n", data)
+		ctx := context.Background()
+
+		store, err := storepkg.New(v.GetString("postgres-uri"))
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		err = store.CreatePerson(ctx, person, data)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 	},
 }

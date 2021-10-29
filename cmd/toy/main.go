@@ -54,17 +54,24 @@ func init() {
 	cli.ConfigureCLI(v, envPrefix, []cli.Flag{
 		{Name: "log-debug", DefValue: false, Description: "Enable debug level log"},
 		{Name: "log-json", DefValue: false, Description: "Enable structured logging"},
+		{Name: "postgres-uri", DefValue: "", Description: "Postgres connection string"},
 	}, rootCmd.PersistentFlags())
 
 	personCmd.AddCommand(personEncodeCmd)
-
-	cli.ConfigureCLI(v, envPrefix, []cli.Flag{
-		{Name: "id", DefValue: 0, Description: "person's id"},
-		{Name: "name", DefValue: "", Description: "person's name"},
-		{Name: "email", DefValue: "", Description: "person's email"},
-	}, personEncodeCmd.Flags())
+	personEncodeCmd.Flags().Int("id", 0, "person's id")
+	personEncodeCmd.Flags().String("name", "", "person's name")
+	personEncodeCmd.Flags().String("email", "", "person's email")
 	personEncodeCmd.MarkFlagRequired("id")
 	personEncodeCmd.MarkFlagRequired("name")
+
+	personCmd.AddCommand(personStoreCmd)
+	personStoreCmd.Flags().Int("id", 0, "person's id")
+	personStoreCmd.Flags().String("name", "", "person's name")
+	personStoreCmd.Flags().String("email", "", "person's email")
+	personStoreCmd.MarkFlagRequired("id")
+	personStoreCmd.MarkFlagRequired("name")
+
+	personCmd.AddCommand(personListCmd)
 
 }
 
