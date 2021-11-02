@@ -71,6 +71,7 @@ ID: 2, Name: Jose, Email: jose@gmail.com
 - How `ProtoBuffer` is used through `buf`
 - The use of `Makefile`
 - The use of `sqlc`
+- The use of `GitHub Actions`
 
 ## Compiling `.proto` files
 
