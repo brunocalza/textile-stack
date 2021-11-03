@@ -58,21 +58,29 @@ func init() {
 	}, rootCmd.PersistentFlags())
 
 	personCmd.AddCommand(personEncodeCmd)
-	personEncodeCmd.Flags().Int("id", 0, "person's id")
-	personEncodeCmd.Flags().String("name", "", "person's name")
-	personEncodeCmd.Flags().String("email", "", "person's email")
+	cli.ConfigureCLI(v, envPrefix, []cli.Flag{
+		{Name: "id", DefValue: 0, Description: "person's id"},
+		{Name: "name", DefValue: "", Description: "person's name"},
+		{Name: "email", DefValue: "", Description: "person's email"},
+	}, personEncodeCmd.Flags())
 	personEncodeCmd.MarkFlagRequired("id")
 	personEncodeCmd.MarkFlagRequired("name")
 
 	personCmd.AddCommand(personStoreCmd)
-	personStoreCmd.Flags().Int("id", 0, "person's id")
-	personStoreCmd.Flags().String("name", "", "person's name")
-	personStoreCmd.Flags().String("email", "", "person's email")
+	cli.ConfigureCLI(v, envPrefix, []cli.Flag{
+		{Name: "id", DefValue: 0, Description: "person's id"},
+		{Name: "name", DefValue: "", Description: "person's name"},
+		{Name: "email", DefValue: "", Description: "person's email"},
+	}, personStoreCmd.Flags())
 	personStoreCmd.MarkFlagRequired("id")
 	personStoreCmd.MarkFlagRequired("name")
 
 	personCmd.AddCommand(personListCmd)
 
+	personCmd.AddCommand(personMetricsCmd)
+	cli.ConfigureCLI(v, envPrefix, []cli.Flag{
+		{Name: "metrics-port", DefValue: ":9090", Description: "prometheus address"},
+	}, personMetricsCmd.Flags())
 }
 
 func initConfigFile(configPath string) error {
